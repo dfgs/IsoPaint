@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="IsoPaint.Views.TileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IsoPaint.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="200">
+	<Grid>
+		<Path  Stroke="Gray" Fill="Transparent" Stretch="Fill" Tag="Up" Data="M0,0 M1,1 M0,0.0 l1,1"/>
+	</Grid>
+</UserControl>

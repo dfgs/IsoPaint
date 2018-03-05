@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="IsoPaint.Views.Test"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Views="clr-namespace:IsoPaint.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+	</UserControl.Resources>
+
+	<Grid>
+		<Views:IsometricPanel SizeX="5" SizeY="7" SizeZ="3" GridSize="32" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" DataContext="{Binding RelativeSource={RelativeSource Self}}" >
+			<Views:VoxelView Views:IsometricPanel.X="0" Views:IsometricPanel.Y="0" Views:IsometricPanel.Z="0" />
+			<Views:VoxelView Views:IsometricPanel.X="4" Views:IsometricPanel.Y="0" Views:IsometricPanel.Z="0" />
+			<Views:VoxelView Views:IsometricPanel.X="0" Views:IsometricPanel.Y="6" Views:IsometricPanel.Z="0"/>
+			<Views:VoxelView Views:IsometricPanel.X="4" Views:IsometricPanel.Y="6" Views:IsometricPanel.Z="0"/>
+
+			<Views:VoxelView Views:IsometricPanel.X="0" Views:IsometricPanel.Y="0" Views:IsometricPanel.Z="2" />
+			<Views:VoxelView Views:IsometricPanel.X="4" Views:IsometricPanel.Y="0" Views:IsometricPanel.Z="2" />
+			<Views:VoxelView Views:IsometricPanel.X="0" Views:IsometricPanel.Y="6" Views:IsometricPanel.Z="2"/>
+			<Views:VoxelView Views:IsometricPanel.X="4" Views:IsometricPanel.Y="6" Views:IsometricPanel.Z="2"/>
+		</Views:IsometricPanel>      
+    </Grid>
+</UserControl>

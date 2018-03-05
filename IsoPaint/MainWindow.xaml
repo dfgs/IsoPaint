@@ -4,9 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IsoPaint"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:ViewLib="clr-namespace:ViewLib;assembly=ViewLib"
+		xmlns:ViewModels="clr-namespace:IsoPaint.ViewModels"
+		xmlns:Views="clr-namespace:IsoPaint.Views"
+		mc:Ignorable="d" Loaded="Window_Loaded"
+        Title="IsoPaint" Height="480" Width="640" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+
+	<Window.CommandBindings>
+		<CommandBinding Command="New" CanExecute="NewCommandBinding_CanExecute" Executed="NewCommandBinding_Executed"/>
+	</Window.CommandBindings>
+	
+    <DockPanel>
+		<StatusBar DockPanel.Dock="Bottom">
+			<TextBlock/>
+		</StatusBar>
+		
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<Button ToolTip="New document" Command="New">
+				<Image Source="Images/page_white_paint.png" Stretch="None"/>
+			</Button>
+			<Button ToolTip="Open document" Command="Open">
+				<Image Source="Images/folder_picture.png" Stretch="None"/>
+			</Button>
+		</StackPanel>
+		<ViewLib:ErrorView DockPanel.Dock="Top" ErrorMessage="{Binding ErrorMessage}"/>
+		<!--TabControl ItemsSource="{Binding}" SelectedItem="{Binding SelectedItem}">
+			<TabControl.ItemTemplate>
+				<DataTemplate DataType="{x:Type ViewModels:DocumentViewModel}">
+					<TextBlock Text="{Binding Name}"/>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+		</-->
+		<Views:Test/>
+	</DockPanel>
 </Window>

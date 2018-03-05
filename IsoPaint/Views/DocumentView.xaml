@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="IsoPaint.Views.DocumentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Views="clr-namespace:IsoPaint.Views"
+             mc:Ignorable="d" >
+    <ListBox>
+		
+		
+	</ListBox>
+</UserControl>
