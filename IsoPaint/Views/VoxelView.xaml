@@ -8,8 +8,8 @@
              d:DesignHeight="200" d:DesignWidth="200">
 	
 	<Grid>
-		<Path  Stroke="Gray" Fill="Transparent" Stretch="Fill" Tag="Up" Data="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25"/>
-		<Path  Stroke="Gray" Fill="Transparent" Stretch="Fill" Tag="Left" Data="M0,0 M1,1 M0,0.25 l0.5,0.25 l0,0.5 l-0.5,-0.25 l0,-0.5"/>
-		<Path  Stroke="Gray" Fill="Transparent" Stretch="Fill" Tag="Right" Data="M0,0 M1,1 M0.5,0.5 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5"/>
+		<Path  Stroke="Gray" Fill="LightGray" Stretch="Fill" Tag="Up" Data="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25"/>
+		<Path  Stroke="Gray" Fill="LightGray" Stretch="Fill" Tag="Left" Data="M0,0 M1,1 M0,0.25 l0.5,0.25 l0,0.5 l-0.5,-0.25 l0,-0.5"/>
+		<Path  Stroke="Gray" Fill="LightGray" Stretch="Fill" Tag="Right" Data="M0,0 M1,1 M0.5,0.5 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5"/>
 	</Grid>
 </UserControl>

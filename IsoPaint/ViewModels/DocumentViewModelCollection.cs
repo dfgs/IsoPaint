@@ -18,7 +18,7 @@ namespace IsoPaint.ViewModels
 
 		protected override Document OnCreateModel()
 		{
-			return new Document();
+			return new Document() {SizeX=8,SizeY=8,SizeZ=8 };
 		}
 
 		protected override DocumentViewModel OnCreateViewModel(Document Model)

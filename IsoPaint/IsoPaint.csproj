@@ -57,6 +57,9 @@
     <Compile Include="Models\Voxel.cs" />
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\DocumentViewModelCollection.cs" />
+    <Compile Include="ViewModels\VoxelViewModel.cs" />
+    <Compile Include="ViewModels\VoxelViewModelCollection.cs" />
+    <Compile Include="Views\ClickEventArgs.cs" />
     <Compile Include="Views\DocumentView.xaml.cs">
       <DependentUpon>DocumentView.xaml</DependentUpon>
     </Compile>

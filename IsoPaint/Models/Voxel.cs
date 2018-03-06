@@ -18,5 +18,11 @@ namespace IsoPaint.Models
 			get;
 			set;
 		}
+		public int Z
+		{
+			get;
+			set;
+		}
+
 	}
 }
