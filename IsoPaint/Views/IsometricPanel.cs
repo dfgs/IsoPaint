@@ -11,13 +11,16 @@ using System.Windows.Media;
 
 namespace IsoPaint.Views
 {
+
 	public class IsometricPanel : Panel
 	{
 		public static readonly DependencyProperty XProperty = DependencyProperty.RegisterAttached("X", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsParentArrange ));
 		public static readonly DependencyProperty YProperty = DependencyProperty.RegisterAttached("Y", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsParentArrange ));
 		public static readonly DependencyProperty ZProperty = DependencyProperty.RegisterAttached("Z", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsParentArrange ));
+		public static readonly DependencyProperty CenterXProperty = DependencyProperty.RegisterAttached("CenterX", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsParentArrange));
+		public static readonly DependencyProperty CenterYProperty = DependencyProperty.RegisterAttached("CenterY", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsParentArrange));
 
-		public event ClickEventHandler Click;
+		//public event ClickEventHandler Click;
 
 		public static readonly DependencyProperty SizeXProperty = DependencyProperty.Register("SizeX", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(8, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
 		public int SizeX
@@ -66,36 +69,17 @@ namespace IsoPaint.Views
 			set { SetValue(SecondaryGridLineBrushProperty, value); }
 		}
 
+
 		[Category("Appearance")]
-		public static readonly DependencyProperty HoverBrushProperty = DependencyProperty.Register("HoverBrush", typeof(Brush), typeof(IsometricPanel), new FrameworkPropertyMetadata(Brushes.Red, FrameworkPropertyMetadataOptions.AffectsRender));
-		public Brush HoverBrush
+		public static readonly DependencyProperty DrawGridProperty = DependencyProperty.Register("DrawGrid", typeof(bool), typeof(IsometricPanel), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+		public bool DrawGrid
 		{
-			get { return (Brush)GetValue(HoverBrushProperty); }
-			set { SetValue(HoverBrushProperty, value); }
+			get { return (bool)GetValue(DrawGridProperty); }
+			set { SetValue(DrawGridProperty, value); }
 		}
 
 
-		public static readonly DependencyProperty HoverXProperty = DependencyProperty.Register("HoverX", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsRender));
-		public int HoverX
-		{
-			get { return (int)GetValue(HoverXProperty); }
-			set { SetValue(HoverXProperty, value); }
-		}
 
-
-		public static readonly DependencyProperty HoverYProperty = DependencyProperty.Register("HoverY", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsRender));
-		public int HoverY
-		{
-			get { return (int)GetValue(HoverYProperty); }
-			set { SetValue(HoverYProperty, value); }
-		}
-
-		public static readonly DependencyProperty HoverZProperty = DependencyProperty.Register("HoverZ", typeof(int), typeof(IsometricPanel), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsRender));
-		public int HoverZ
-		{
-			get { return (int)GetValue(HoverZProperty); }
-			set { SetValue(HoverZProperty, value); }
-		}
 
 
 
@@ -124,6 +108,24 @@ namespace IsoPaint.Views
 		{
 			Element.SetValue(ZProperty, Value);
 		}
+		public static int GetCenterX(UIElement Element)
+		{
+			return (int)Element.GetValue(CenterXProperty);
+		}
+		public static void SetCenterX(UIElement Element, int Value)
+		{
+			Element.SetValue(CenterXProperty, Value);
+		}
+		public static int GetCenterY(UIElement Element)
+		{
+			return (int)Element.GetValue(CenterYProperty);
+		}
+		public static void SetCenterY(UIElement Element, int Value)
+		{
+			Element.SetValue(CenterYProperty, Value);
+		}
+
+		
 
 		public IsometricPanel()
 		{
@@ -132,25 +134,24 @@ namespace IsoPaint.Views
 
 		public Size GetSize(int SizeX,int SizeY,int SizeZ)
 		{
-
 			return new Size((SizeX+SizeY) * GridSize*0.5, (SizeY+SizeX )* GridSize * 0.25f + (SizeZ)*GridSize*0.5f );
 		}
 
 		
 		public void UnProject(Point Position, out int X, out int Y, int Z)
 		{
-			Y = (int)((2 * Position.Y + Position.X) / GridSize + Z - SizeZ - SizeX * 0.5f);
-			X = (int)((2 * Position.Y - Position.X) / GridSize + Z - SizeZ + SizeX * 0.5f);
+			Y = (int)Math.Floor((2 * Position.Y + Position.X) / GridSize + Z - SizeZ - SizeX * 0.5f) ;
+			X = (int)Math.Floor((2 * Position.Y - Position.X) / GridSize + Z - SizeZ + SizeX * 0.5f);
 		}
 		public void UnProject(Point Position, int X, out int Y, out int Z)
 		{
-			Y = (int)(2 * Position.X / GridSize + X - SizeX);
-			Z = (int)((Position.X - 2 * Position.Y) / GridSize + X + SizeZ - SizeX * 0.5f);
+			Y = (int)Math.Floor(2 * Position.X / GridSize + X - SizeX);
+			Z = (int)Math.Floor((Position.X - 2 * Position.Y) / GridSize + X + SizeZ - SizeX * 0.5f);
 		}
 		public void UnProject(Point Position, out int X, int Y, out int Z)
 		{
-			X = (int)(-2 * Position.X / GridSize + Y + SizeX);
-			Z = (int)( (-2 * Position.Y - Position.X) / GridSize + Y + SizeZ + SizeX * 0.5f );
+			X = (int)Math.Floor(-2 * Position.X / GridSize + Y + SizeX);
+			Z = (int)Math.Floor( (-2 * Position.Y - Position.X) / GridSize + Y + SizeZ + SizeX * 0.5f );
 		}
 
 
@@ -166,11 +167,17 @@ namespace IsoPaint.Views
 		public Point GetIsometricCoordinates(UIElement Element)
 		{
 			int X, Y, Z;
+			int CenterX, CenterY;
+			Point pt;
 
 			X = GetX(Element);
 			Y = GetY(Element);
 			Z = GetZ(Element);
-			return GetIsometricCoordinates(X, Y, Z);
+			CenterX = GetCenterX(Element);
+			CenterY = GetCenterY(Element);
+			pt = GetIsometricCoordinates(X, Y, Z);
+			pt.Offset(-CenterX,-CenterY);
+			return pt;
 		}
 
 		protected override Size MeasureOverride(Size availableSize)
@@ -202,40 +209,18 @@ namespace IsoPaint.Views
 			return DesiredSize;
 		}
 
-		protected override void OnMouseMove(MouseEventArgs e)
-		{
-			int x, y,z;
-
-			base.OnMouseMove(e);
-			y = 0;
-			UnProject(e.GetPosition(this), out x, y, out z);
-			//Get3DCoordinates(e.GetPosition(this), out x, y, out z);
-			//Get3DCoordinates(e.GetPosition(this), x, out y, out z);
-			this.HoverX = x;this.HoverY = y;this.HoverZ = z;
-		}
-
-		protected override void OnMouseDown(MouseButtonEventArgs e)
-		{
-			base.OnMouseDown(e);
-			if ((HoverX >= 0) && (HoverY >= 0) && (HoverZ >= 0) && (HoverX < SizeX) && (HoverY < SizeY) && (HoverZ < SizeZ))
-			{
-				if (e.Source == this)
-				{
-					if (Click != null) Click(this, new ClickEventArgs(HoverX, HoverY, HoverZ));
-				}
-			}
-
-		}
+		
 
 		protected override void OnRender(DrawingContext dc)
 		{
 			base.OnRender(dc);
-			Pen primaryPen,secondaryPen,hoverPen;
-			Point A, B, C, D;
+			Pen primaryPen,secondaryPen;
+			//Point A, B, C, D;
+
+			if (!DrawGrid) return;
 
 			primaryPen = new Pen(PrimaryGridLineBrush, 1);
 			secondaryPen = new Pen(SecondaryGridLineBrush, 1);
-			hoverPen = new Pen(HoverBrush, 1);
 
 			dc.DrawLine(primaryPen, GetIsometricCoordinates(0, 0, 0), GetIsometricCoordinates(SizeX, 0, 0));
 			dc.DrawLine(primaryPen, GetIsometricCoordinates(SizeX, 0, 0), GetIsometricCoordinates(SizeX, SizeY, 0));
@@ -266,18 +251,47 @@ namespace IsoPaint.Views
 			dc.DrawLine(primaryPen, GetIsometricCoordinates(0, 0, SizeZ), GetIsometricCoordinates(0, SizeY, SizeZ));
 			dc.DrawLine(primaryPen,  GetIsometricCoordinates(0, SizeY, SizeZ), GetIsometricCoordinates(0, SizeY, 0));
 
-			if ((HoverX >= 0) && (HoverY >= 0) && (HoverZ >= 0) && (HoverX < SizeX) && (HoverY < SizeY) && (HoverZ < SizeZ))
+			/*if ((HoverX >= 0) && (HoverY >= 0) && (HoverZ >= 0) && (HoverX < SizeX) && (HoverY < SizeY) && (HoverZ < SizeZ))
 			{
-				A = GetIsometricCoordinates(HoverX, HoverY, HoverZ);
-				B = GetIsometricCoordinates(HoverX+1, HoverY, HoverZ);
-				C = GetIsometricCoordinates(HoverX+1, HoverY+1, HoverZ);
-				D = GetIsometricCoordinates(HoverX, HoverY+1, HoverZ);
+				switch(hoveredFace)
+				{
+					case HoverFaces.Bottom:
+						A = GetIsometricCoordinates(HoverX, HoverY, HoverZ);
+						B = GetIsometricCoordinates(HoverX + 1, HoverY, HoverZ);
+						C = GetIsometricCoordinates(HoverX + 1, HoverY + 1, HoverZ);
+						D = GetIsometricCoordinates(HoverX, HoverY + 1, HoverZ);
+						break;
+					case HoverFaces.Top:
+						A = GetIsometricCoordinates(HoverX, HoverY, HoverZ+1);
+						B = GetIsometricCoordinates(HoverX + 1, HoverY, HoverZ + 1);
+						C = GetIsometricCoordinates(HoverX + 1, HoverY + 1, HoverZ + 1);
+						D = GetIsometricCoordinates(HoverX, HoverY + 1, HoverZ + 1);
+						break;
+					case HoverFaces.Left:
+						A = GetIsometricCoordinates(HoverX, HoverY, HoverZ);
+						B = GetIsometricCoordinates(HoverX + 1, HoverY, HoverZ);
+						C = GetIsometricCoordinates(HoverX + 1, HoverY, HoverZ + 1);
+						D = GetIsometricCoordinates(HoverX, HoverY, HoverZ + 1);
+						break;
+					case HoverFaces.Right:
+						A = GetIsometricCoordinates(HoverX, HoverY+1, HoverZ);
+						B = GetIsometricCoordinates(HoverX + 1, HoverY+1, HoverZ);
+						C = GetIsometricCoordinates(HoverX + 1, HoverY+1, HoverZ + 1);
+						D = GetIsometricCoordinates(HoverX, HoverY+1, HoverZ + 1);
+						break;
+					default:
+						A = GetIsometricCoordinates(HoverX, HoverY, HoverZ);
+						B = GetIsometricCoordinates(HoverX , HoverY + 1, HoverZ);
+						C = GetIsometricCoordinates(HoverX , HoverY + 1, HoverZ + 1);
+						D = GetIsometricCoordinates(HoverX, HoverY , HoverZ + 1);
+						break;
+				}
 
 				dc.DrawLine(hoverPen, A, B);
 				dc.DrawLine(hoverPen, B, C);
 				dc.DrawLine(hoverPen, C, D);
 				dc.DrawLine(hoverPen, D, A);
-			}
+			}*/
 
 		}
 

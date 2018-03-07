@@ -7,47 +7,42 @@ using System.Xml.Serialization;
 
 namespace IsoPaint.Models
 {
-	public class Document
-	{
+    public class Color
+    {
 		[XmlAttribute]
-		public int SizeX
+		public byte A
 		{
 			get;
 			set;
 		}
 		[XmlAttribute]
-		public int SizeY
+		public byte R
 		{
 			get;
 			set;
 		}
 		[XmlAttribute]
-		public int SizeZ
+		public byte G
+		{
+			get;
+			set;
+		}
+		[XmlAttribute]
+		public byte B
 		{
 			get;
 			set;
 		}
 
-		public Palette Palette
+		public Color()
 		{
-			get;
-			set;
+			A = 255;
+		}
+		public Color(byte A, byte R, byte G, byte B)
+		{
+			this.A = A;this.R = R;this.G = G;this.B = B;
 		}
 
-		public List<Voxel> Voxels
-		{
-			get;
-			set;
-		}
 		
-
-		public Document()
-		{
-			Voxels = new List<Voxel>();
-			Palette = new Palette();
-			//Voxels.Add(new Voxel() { X = 0 });
-			//Voxels.Add(new Voxel() { X = 1 });
-		}
-
-	}
+    }
 }

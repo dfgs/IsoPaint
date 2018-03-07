@@ -9,7 +9,7 @@ using ViewModelLib;
 
 namespace IsoPaint.ViewModels
 {
-	public class DocumentViewModelCollection : ViewModelCollection<List<Document>, DocumentViewModel, Document>
+	public class DocumentViewModelCollection : ListViewModelCollection< DocumentViewModel, Document>
 	{
 		public DocumentViewModelCollection(ILogger Logger) : base(Logger)
 		{
@@ -25,31 +25,12 @@ namespace IsoPaint.ViewModels
 		{
 			return new DocumentViewModel(Logger);
 		}
-
-		protected override bool OnAreModelsAreEquals(Document A, Document B)
-		{
-			return false;
-		}
-		
-		protected override async Task OnAddModelAsync(Document Item, int Index)
-		{
-			await Dispatcher.InvokeAsync(() => { Model.Insert(Index, Item); });
-		}
-		protected override async Task OnRemoveModelAsync(Document Item, int Index)
-		{
-			await Dispatcher.InvokeAsync(() => { Model.RemoveAt(Index); });
-		}
-		protected override async Task OnEditModelAsync(Document Item, int Index)
-		{
-			await Task.Yield();
-		}
 		
 		protected override IEnumerable<Document> OnLoadItems(List<Document> Model)
 		{
 			return Model;
 		}
 
-
-
+		
 	}
 }

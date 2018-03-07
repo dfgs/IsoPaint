@@ -15,11 +15,25 @@ namespace IsoPaint.ViewModels
 		{
 		}
 
+		public bool ContainsVoxelAtPos(int X, int Y, int Z)
+		{
+			return Items.FirstOrDefault(item => (item.X == X) && (item.Y == Y) && (item.Z == Z)) != null;
+		}
+		public VoxelViewModel GetVoxelAtPos(int X, int Y, int Z)
+		{
+			return Items.FirstOrDefault(item => (item.X == X) && (item.Y == Y) && (item.Z == Z));
+		}
+
 		int IComparer<Tuple<int, int, int>>.Compare(Tuple<int, int, int> A, Tuple<int, int, int> B)
 		{
-			if ((A.Item3 == B.Item3) && (A.Item2 == B.Item2) && (A.Item1 == B.Item1)) return 0;
-			if ((A.Item3 < B.Item3) && (A.Item2 < B.Item2) && (A.Item1 < B.Item1)) return -1;
-			return 1;
+			if (A.Item3 < B.Item3) return -1;
+			if (A.Item3 > B.Item3) return 1;
+			if (A.Item2 < B.Item2) return -1;
+			if (A.Item2 > B.Item2) return 1;
+			if (A.Item1 < B.Item1) return -1;
+			if (A.Item1 > B.Item1) return 1;
+
+			return 0;
 		}
 
 		protected override int OnGetInsertIndex(VoxelViewModel ViewModel)
@@ -29,7 +43,7 @@ namespace IsoPaint.ViewModels
 			for(int t=0;t<Count;t++)
 			{
 				item = this[t];
-				if ((ViewModel.Z <= item.Z) && (ViewModel.Y <= item.Y) && (ViewModel.X >= item.X)) return t;
+				if ((ViewModel.Z <= item.Z) && (ViewModel.Y <= item.Y) && (ViewModel.X <= item.X)) return t;
 			}
 			return base.OnGetInsertIndex(ViewModel);
 		}

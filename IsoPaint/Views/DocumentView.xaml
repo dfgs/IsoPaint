@@ -3,38 +3,54 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Views="clr-namespace:IsoPaint.Views" x:Name="root"
+             xmlns:Views="clr-namespace:IsoPaint.Views" 
 			 xmlns:ViewLib="clr-namespace:ViewLib;assembly=ViewLib"
-             mc:Ignorable="d" >
+             mc:Ignorable="d" x:Name="root" d:DesignWidth="800"  d:DesignHeight="600" >
+	
 	<DockPanel DataContext="{Binding ElementName=root,Path=DocumentViewModel}">
 		<ViewLib:ErrorView DockPanel.Dock="Top" ErrorMessage="{Binding ErrorMessage}"/>
-		<ItemsControl ItemsSource="{Binding Voxels}"  >
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<Views:IsometricPanel Background="Transparent" 
-										  SizeX="{Binding SizeX}" SizeY="{Binding SizeY}" SizeZ="{Binding SizeZ}" 
-										HoverX="{Binding HoverX,Mode=OneWayToSource}" HoverY="{Binding HoverY,Mode=OneWayToSource}" HoverZ="{Binding HoverZ,Mode=OneWayToSource}"
-										  Click="IsometricPanel_Click"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-			<ItemsControl.ItemContainerStyle>
-				<Style TargetType="{x:Type ContentPresenter}">
-					<Setter Property="Views:IsometricPanel.X" Value="{Binding X}"/>
-					<Setter Property="Views:IsometricPanel.Y" Value="{Binding Y}"/>
-					<Setter Property="Views:IsometricPanel.Z" Value="{Binding Z}"/>
-					<Setter Property="RenderTransform">
-						<Setter.Value>
-							<TranslateTransform Y="-24" />
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</ItemsControl.ItemContainerStyle>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Views:VoxelView/>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="5"/>
+				<ColumnDefinition Width="200"/>
+			</Grid.ColumnDefinitions>
+			
+			<ItemsControl Grid.Column="0" ItemsSource="{Binding Voxels}"  >
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Views:IsometricPanel  Background="Transparent" GridSize="32" MouseMove="ItemsControl_MouseMove" MouseDown="IsometricPanel_MouseDown"
+											SizeX="{Binding SizeX}" SizeY="{Binding SizeY}" SizeZ="{Binding SizeZ}" 
+										    Views:HoverAdorner.Show="True"
+											Views:HoverAdorner.X="{Binding ElementName=root,Path=HoverX}"
+											Views:HoverAdorner.Y="{Binding ElementName=root,Path=HoverY}"
+											Views:HoverAdorner.Z="{Binding ElementName=root,Path=HoverZ}"
+											Views:HoverAdorner.Face="{Binding ElementName=root,Path=HoverFace}"
+										  />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemContainerStyle>
+					<Style TargetType="{x:Type ContentPresenter}">
+						<Setter Property="Views:IsometricPanel.X" Value="{Binding X}"/>
+						<Setter Property="Views:IsometricPanel.Y" Value="{Binding Y}"/>
+						<Setter Property="Views:IsometricPanel.Z" Value="{Binding Z}"/>
+						<Setter Property="Views:IsometricPanel.CenterX" Value="16"/>
+						<Setter Property="Views:IsometricPanel.CenterY" Value="16"/>
+					</Style>
+				</ItemsControl.ItemContainerStyle>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Views:VoxelView Views:IsometricPanel.X="{Binding X}" Views:IsometricPanel.Y="{Binding Y}" Views:IsometricPanel.Z="{Binding Z}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+			<Views:PaletteView Grid.Column="2" PaletteViewModel="{Binding Palette}"/>
+		</Grid>
+			
+		
 	</DockPanel>
 
 </UserControl>

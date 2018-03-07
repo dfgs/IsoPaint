@@ -1,6 +1,7 @@
 ﻿using IsoPaint.Models;
 using IsoPaint.ViewModels;
 using LogLib;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,21 +24,21 @@ namespace IsoPaint
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private DocumentViewModelCollection vm;
+		private DocumentViewModelCollection documentViewModel;
 		private ILogger logger;
 
 		public MainWindow()
 		{
+			logger = new ConsoleLogger(new DefaultLogFormatter());
+			documentViewModel = new DocumentViewModelCollection(logger);
+
 			InitializeComponent();
 		}
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-
-			logger = new ConsoleLogger(new DefaultLogFormatter());
-			vm = new DocumentViewModelCollection(logger);
-			await vm.LoadAsync(new List<Document>());
-			DataContext = vm;
+			await documentViewModel.LoadAsync(new List<Document>());
+			DataContext = documentViewModel;
 		}
 
 		private void NewCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -50,14 +51,85 @@ namespace IsoPaint
 
 			try
 			{
-				vm.SelectedItem = await vm.AddAsync(null);
+				documentViewModel.SelectedItem = await documentViewModel.AddAsync(null);
 			}
 			catch
 			{
-				vm.ErrorMessage = "Failed to create new document";
+				documentViewModel.ErrorMessage = "Failed to create new document";
 			}
 		}
 
-		
+		private void OpenCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.Handled = true; e.CanExecute = true;
+		}
+
+		private async void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			OpenFileDialog dialog;
+			DocumentViewModel vm;
+
+			dialog = new OpenFileDialog();
+			dialog.Filter = "xml files|*.xml|All files|*.*";
+			if (!dialog.ShowDialog(this) ?? false) return;
+
+			try
+			{
+				vm = new DocumentViewModel(logger);
+				await vm.LoadAsync(dialog.FileName);
+				await documentViewModel.AddAsync(null,vm);
+				documentViewModel.SelectedItem = vm;
+			}
+			catch
+			{
+				documentViewModel.ErrorMessage = "Failed to load document";
+			}
+		}
+
+
+		private void SaveCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.Handled = true; e.CanExecute = (documentViewModel.SelectedItem != null) && (documentViewModel.SelectedItem.FileName!=null);
+		}
+
+		private async void SaveCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			try
+			{
+				await documentViewModel.SelectedItem.SaveAsync();
+			}
+			catch
+			{
+				documentViewModel.ErrorMessage = "Failed to save document";
+			}
+		}
+
+		private void SaveAsCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.Handled = true; e.CanExecute = documentViewModel.SelectedItem != null;
+		}
+
+		private async void SaveAsCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			SaveFileDialog dialog;
+
+			dialog = new SaveFileDialog();
+			dialog.FileName = documentViewModel.SelectedItem.FileName;
+			dialog.Filter = "xml files|*.xml|All files|*.*";
+			if (!dialog.ShowDialog(this) ?? false) return;
+
+			try
+			{
+				await documentViewModel.SelectedItem.SaveToFileAsync(dialog.FileName);
+			}
+			catch
+			{
+				documentViewModel.ErrorMessage = "Failed to save document";
+			}
+		}
+
+
+
+
 	}
 }

@@ -12,15 +12,20 @@
 
 	<Window.CommandBindings>
 		<CommandBinding Command="New" CanExecute="NewCommandBinding_CanExecute" Executed="NewCommandBinding_Executed"/>
+		<CommandBinding Command="Save" CanExecute="SaveCommandBinding_CanExecute" Executed="SaveCommandBinding_Executed"/>
+		<CommandBinding Command="SaveAs" CanExecute="SaveAsCommandBinding_CanExecute" Executed="SaveAsCommandBinding_Executed"/>
+		<CommandBinding Command="Open" CanExecute="OpenCommandBinding_CanExecute" Executed="OpenCommandBinding_Executed"/>
 	</Window.CommandBindings>
 	
     <DockPanel>
 		<StatusBar DockPanel.Dock="Bottom" DataContext="{Binding }">
-			<TextBlock Text="{Binding SelectedItem.HoverX}"/>
-			<TextBlock Text=", "/>
-			<TextBlock Text="{Binding SelectedItem.HoverY}"/>
-			<TextBlock Text=", "/>
-			<TextBlock Text="{Binding SelectedItem.HoverZ}"/>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding SelectedItem.HoverX,FallbackValue=0}"/>
+				<TextBlock Text=", "/>
+				<TextBlock Text="{Binding SelectedItem.HoverY,FallbackValue=0}"/>
+				<TextBlock Text=", "/>
+				<TextBlock Text="{Binding SelectedItem.HoverZ,FallbackValue=0}"/>
+			</StackPanel>
 		</StatusBar>
 		
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
@@ -29,6 +34,12 @@
 			</Button>
 			<Button ToolTip="Open document" Command="Open">
 				<Image Source="Images/folder_picture.png" Stretch="None"/>
+			</Button>
+			<Button ToolTip="Save document" Command="Save">
+				<Image Source="Images/picture_save.png" Stretch="None"/>
+			</Button>
+			<Button ToolTip="Save document as" Command="SaveAs">
+				<Image Source="Images/picture_save.png" Stretch="None"/>
 			</Button>
 		</StackPanel>
 		
@@ -41,7 +52,7 @@
 			</TabControl.ItemTemplate>
 			<TabControl.ContentTemplate>
 				<DataTemplate>
-					<Views:DocumentView DocumentViewModel="{Binding}"/>
+					<Views:DocumentView DocumentViewModel="{Binding}" HoverX="{Binding HoverX,Mode=OneWayToSource}" HoverY="{Binding HoverY,Mode=OneWayToSource}" HoverZ="{Binding HoverZ,Mode=OneWayToSource}"/>
 				</DataTemplate>
 			</TabControl.ContentTemplate>
 		</TabControl>
