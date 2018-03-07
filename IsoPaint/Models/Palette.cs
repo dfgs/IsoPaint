@@ -18,7 +18,7 @@ namespace IsoPaint.Models
 		public Palette()
 		{
 			Colors = new List<Color>();
-			Colors.Add(new Color());
+			//Colors.Add(new Color());
 		}
 
     }

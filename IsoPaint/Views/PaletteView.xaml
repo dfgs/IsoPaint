@@ -29,7 +29,7 @@
 				<Image Source="/IsoPaint;component/Images/delete.png" Stretch="None"/>
 			</Button>
 		</StackPanel>
-		<ListBox  ItemsSource="{Binding}" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+		<ListBox  ItemsSource="{Binding}" SelectionMode="Extended" SelectedItem="{Binding SelectedItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 			<ListBox.ItemsPanel>
 				<ItemsPanelTemplate>
 					<WrapPanel/>

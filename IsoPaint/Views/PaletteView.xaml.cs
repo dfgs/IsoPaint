@@ -1,4 +1,5 @@
-﻿using IsoPaint.ViewModels;
+﻿using IsoPaint.Models;
+using IsoPaint.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -41,9 +41,13 @@ namespace IsoPaint.Views
 
 		private async void AddCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			Color model;
+
 			try
 			{
-				await PaletteViewModel.Colors.AddAsync(null);
+				model = new Color();
+				if (PaletteViewModel.Colors.Any()) model.ID = PaletteViewModel.Colors.Max(item => item.ID)+1;
+				await PaletteViewModel.Colors.AddAsync(null,model);
 			}
 			catch
 			{

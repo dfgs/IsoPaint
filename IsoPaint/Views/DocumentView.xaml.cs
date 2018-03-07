@@ -116,60 +116,81 @@ namespace IsoPaint.Views
 			this.HoverX = x; this.HoverY = y; this.HoverZ = z;
 		}
 
-		private async void IsometricPanel_MouseDown(object sender, MouseButtonEventArgs e)
+		protected async Task OnLeftClickAsync()
 		{
-			Voxel model;
 			int x, y, z;
 			VoxelViewModel viewModel;
+			Voxel model;
 
+			
+
+			viewModel = DocumentViewModel.Voxels.GetVoxelAtPos(HoverX, HoverY, HoverZ);
+			if ((viewModel!=null) && (Keyboard.Modifiers == ModifierKeys.Control))
+			{
+				viewModel.ColorID = DocumentViewModel.Palette.Colors.SelectedItem?.ID ?? 0;
+				return;
+			}
+
+			switch (HoverFace)
+			{
+				case HoverFaces.Top:
+					x = HoverX; y = HoverY; z = HoverZ + 1;
+					break;
+				case HoverFaces.Right:
+					x = HoverX; y = HoverY + 1; z = HoverZ;
+					break;
+				case HoverFaces.Front:
+					x = HoverX + 1; y = HoverY; z = HoverZ;
+					break;
+				default:
+					x = HoverX; y = HoverY; z = HoverZ;
+					break;
+			}
+
+			if ((x < 0) || (y < 0) || (z < 0) || (x >= DocumentViewModel.SizeX) || (y >= DocumentViewModel.SizeY) || (z >= DocumentViewModel.SizeZ)) return;
+
+			if (DocumentViewModel.Voxels.ContainsVoxelAtPos(x, y, z)) return;
+
+			model = new Voxel() { X = x, Y = y, Z = z, ColorID = DocumentViewModel.Palette.Colors.SelectedItem?.ID ?? 0 };
+			try
+			{
+				await DocumentViewModel.Voxels.AddAsync(null, model);
+			}
+			catch
+			{
+				DocumentViewModel.ErrorMessage = "Failed to add voxel";
+			}
+
+		}
+
+		protected async Task OnRightClickAsync()
+		{
+			VoxelViewModel viewModel;
+
+			viewModel = DocumentViewModel.Voxels.GetVoxelAtPos(HoverX, HoverY, HoverZ);
+			if (viewModel == null) return;
+			try
+			{
+				await DocumentViewModel.Voxels.RemoveAsync(null, viewModel);
+			}
+			catch
+			{
+				DocumentViewModel.ErrorMessage = "Failed to remove voxel";
+			}
+		}
+
+		private async void IsometricPanel_MouseDown(object sender, MouseButtonEventArgs e)
+		{
 			if (DocumentViewModel == null) return;
+			if ((HoverX < 0) || (HoverY < 0) || (HoverZ < 0) || (HoverX >= DocumentViewModel.SizeX) || (HoverY >= DocumentViewModel.SizeY) || (HoverZ >= DocumentViewModel.SizeZ)) return;
 
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
-				switch (HoverFace)
-				{
-					case HoverFaces.Top:
-						x = HoverX; y = HoverY; z = HoverZ + 1;
-						break;
-					case HoverFaces.Right:
-						x = HoverX; y = HoverY + 1; z = HoverZ;
-						break;
-					case HoverFaces.Front:
-						x = HoverX + 1; y = HoverY; z = HoverZ;
-						break;
-					default:
-						x = HoverX; y = HoverY; z = HoverZ;
-						break;
-				}
-				if ((x < 0) || (y < 0) || (z < 0) || (x >= DocumentViewModel.SizeX) || (y >= DocumentViewModel.SizeY) || (z >= DocumentViewModel.SizeZ)) return;
-
-				if (DocumentViewModel.Voxels.ContainsVoxelAtPos(x, y, z)) return;
-				model = new Voxel() { X = x, Y = y, Z = z };
-				try
-				{
-					await DocumentViewModel.Voxels.AddAsync(null, model);
-				}
-				catch
-				{
-					DocumentViewModel.ErrorMessage = "Failed to add voxel";
-				}
+				await OnLeftClickAsync();
 			}
 			else if (e.RightButton==MouseButtonState.Pressed)
 			{
-				x = HoverX;y = HoverY;z = HoverZ;
-
-				if ((x < 0) || (y < 0) || (z < 0) || (x >= DocumentViewModel.SizeX) || (y >= DocumentViewModel.SizeY) || (z >= DocumentViewModel.SizeZ)) return;
-
-				viewModel = DocumentViewModel.Voxels.GetVoxelAtPos(x, y, z);
-				if (viewModel==null) return;
-				try
-				{
-					await DocumentViewModel.Voxels.RemoveAsync(null, viewModel);
-				}
-				catch
-				{
-					DocumentViewModel.ErrorMessage = "Failed to remove voxel";
-				}
+				await OnRightClickAsync();
 			}
 		}
 

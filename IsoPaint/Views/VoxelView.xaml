@@ -4,12 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Views="clr-namespace:IsoPaint.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" x:Name="root"
              d:DesignHeight="200" d:DesignWidth="200">
-	
-	<Grid>
-		<Path  Stroke="Gray" Fill="LightGray" Stretch="Fill" Tag="Up" Data="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25" Views:HoverAdorner.Face="Top" />
-		<Path  Stroke="Gray" Fill="LightGray" Stretch="Fill" Tag="Left" Data="M0,0 M1,1 M0,0.25 l0.5,0.25 l0,0.5 l-0.5,-0.25 l0,-0.5"  Views:HoverAdorner.Face="Front"/>
-		<Path  Stroke="Gray" Fill="LightGray" Stretch="Fill" Tag="Right" Data="M0,0 M1,1 M0.5,0.5 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5" Views:HoverAdorner.Face="Right"/>
+	<UserControl.Resources>
+		<SolidColorBrush x:Key="lightBrush" Color="#22FFFFFF"/>
+		<SolidColorBrush x:Key="darkBrush" Color="#22000000"/>
+	</UserControl.Resources>
+	<Grid DataContext="{Binding ElementName=root}">
+		<Path  Stroke="{Binding Brush,FallbackValue=Gray}" Fill="{Binding Brush}" Stretch="Fill" Tag="Up" Data="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25" Views:HoverAdorner.Face="Top" />
+		<Path  Fill="{StaticResource lightBrush}" Stretch="Fill" Tag="Up" Data="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25" Views:HoverAdorner.Face="Top" />
+		<Path  Stroke="{Binding Brush,FallbackValue=Gray}" Fill="{Binding Brush}" Stretch="Fill" Tag="Left" Data="M0,0 M1,1 M0,0.25 l0.5,0.25 l0,0.5 l-0.5,-0.25 l0,-0.5"  Views:HoverAdorner.Face="Front"/>
+		<Path  Stroke="{Binding Brush,FallbackValue=Gray}" Fill="{Binding Brush}" Stretch="Fill" Tag="Right" Data="M0,0 M1,1 M0.5,0.5 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5" Views:HoverAdorner.Face="Right"/>
+		<Path  Fill="{StaticResource darkBrush}" Stretch="Fill" Tag="Right" Data="M0,0 M1,1 M0.5,0.5 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5" Views:HoverAdorner.Face="Right"/>
 	</Grid>
 </UserControl>

@@ -11,8 +11,11 @@ namespace IsoPaint.ViewModels
 {
 	public class VoxelViewModelCollection : ViewModelCollection<List<Voxel>, VoxelViewModel, Voxel>,IComparer<Tuple<int,int,int>>
 	{
-		public VoxelViewModelCollection(ILogger Logger) : base(Logger)
+		private DocumentViewModel document;
+
+		public VoxelViewModelCollection(ILogger Logger, DocumentViewModel Document) : base(Logger)
 		{
+			this.document = Document;
 		}
 
 		public bool ContainsVoxelAtPos(int X, int Y, int Z)
@@ -56,7 +59,7 @@ namespace IsoPaint.ViewModels
 
 		protected override VoxelViewModel OnCreateViewModel(Voxel Model)
 		{
-			return new VoxelViewModel(Logger);
+			return new VoxelViewModel(Logger,document);
 		}
 
 

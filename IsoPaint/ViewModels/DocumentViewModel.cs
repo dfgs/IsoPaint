@@ -84,7 +84,7 @@ namespace IsoPaint.ViewModels
 		public DocumentViewModel(ILogger Logger) : base(Logger)
 		{
 			Name = "New document";
-			Voxels = new VoxelViewModelCollection(Logger);
+			Voxels = new VoxelViewModelCollection(Logger,this);
 			Palette = new PaletteViewModel(Logger);
 		}
 

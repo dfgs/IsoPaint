@@ -10,6 +10,13 @@ namespace IsoPaint.Models
     public class Color
     {
 		[XmlAttribute]
+		public int ID
+		{
+			get;
+			set;
+		}
+
+		[XmlAttribute]
 		public byte A
 		{
 			get;

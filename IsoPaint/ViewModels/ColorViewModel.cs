@@ -11,6 +11,12 @@ namespace IsoPaint.ViewModels
 {
 	public class ColorViewModel : ViewModel<Color>
 	{
+		public int ID
+		{
+			get { return Model.ID; }
+			set { Model.ID = value;OnPropertyChanged(); }
+		}
+
 		public System.Windows.Media.Color Value
 		{
 			get { return System.Windows.Media.Color.FromArgb(Model.A, Model.R, Model.G, Model.B); }

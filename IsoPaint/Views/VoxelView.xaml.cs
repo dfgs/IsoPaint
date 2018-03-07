@@ -20,6 +20,14 @@ namespace IsoPaint.Views
 	/// </summary>
 	public partial class VoxelView : UserControl
 	{
+
+		public static readonly DependencyProperty BrushProperty = DependencyProperty.Register("Brush", typeof(Brush), typeof(VoxelView));
+		public Brush Brush
+		{
+			get { return (Brush)GetValue(BrushProperty); }
+			set { SetValue(BrushProperty, value); }
+		}
+
 		public VoxelView()
 		{
 			InitializeComponent();

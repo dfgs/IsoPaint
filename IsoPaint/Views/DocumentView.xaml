@@ -13,7 +13,7 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"/>
 				<ColumnDefinition Width="5"/>
-				<ColumnDefinition Width="200"/>
+				<ColumnDefinition Width="230"/>
 			</Grid.ColumnDefinitions>
 			
 			<ItemsControl Grid.Column="0" ItemsSource="{Binding Voxels}"  >
@@ -40,7 +40,7 @@
 				</ItemsControl.ItemContainerStyle>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Views:VoxelView Views:IsometricPanel.X="{Binding X}" Views:IsometricPanel.Y="{Binding Y}" Views:IsometricPanel.Z="{Binding Z}"/>
+						<Views:VoxelView Brush="{Binding Color.Brush}" Views:IsometricPanel.X="{Binding X}" Views:IsometricPanel.Y="{Binding Y}" Views:IsometricPanel.Z="{Binding Z}"/>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>

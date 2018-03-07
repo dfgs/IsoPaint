@@ -27,6 +27,12 @@ namespace IsoPaint.Models
 			get;
 			set;
 		}
+		[XmlAttribute]
+		public int ColorID
+		{
+			get;
+			set;
+		}
 
 	}
 }

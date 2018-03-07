@@ -14,7 +14,10 @@ namespace IsoPaint.ViewModels
 		public ColorViewModelCollection(ILogger Logger) : base(Logger)
 		{
 		}
-
+		protected override bool OnAreModelsAreEquals(Color A, Color B)
+		{
+			return (A.A == B.A) && (A.R == B.R) && (A.G == B.G) && (A.B == B.B) ;
+		}
 		protected override Color OnCreateModel()
 		{
 			return new Color();
