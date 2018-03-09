@@ -7,7 +7,7 @@
         xmlns:ViewLib="clr-namespace:ViewLib;assembly=ViewLib"
 		xmlns:ViewModels="clr-namespace:IsoPaint.ViewModels"
 		xmlns:Views="clr-namespace:IsoPaint.Views"
-		mc:Ignorable="d" Loaded="Window_Loaded"
+		mc:Ignorable="d" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen"
         Title="IsoPaint" Height="480" Width="640" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
 
 	<Window.CommandBindings>
@@ -20,11 +20,28 @@
     <DockPanel>
 		<StatusBar DockPanel.Dock="Bottom" DataContext="{Binding }">
 			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="Size X:"/>
+				<TextBlock Text="{Binding SelectedItem.SizeX,FallbackValue=0}"/>
+				<TextBlock Text=", Size Y:"/>
+				<TextBlock Text="{Binding SelectedItem.SizeY,FallbackValue=0}"/>
+				<TextBlock Text=", Size Z:"/>
+				<TextBlock Text="{Binding SelectedItem.SizeZ,FallbackValue=0}"/>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="X:"/>
 				<TextBlock Text="{Binding SelectedItem.HoverX,FallbackValue=0}"/>
-				<TextBlock Text=", "/>
+				<TextBlock Text=", Y:"/>
 				<TextBlock Text="{Binding SelectedItem.HoverY,FallbackValue=0}"/>
-				<TextBlock Text=", "/>
+				<TextBlock Text=", Z:"/>
 				<TextBlock Text="{Binding SelectedItem.HoverZ,FallbackValue=0}"/>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="Ceiling:"/>
+				<TextBlock Text="{Binding SelectedItem.Voxels.Ceiling,FallbackValue=0}"/>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="Hovered face:"/>
+				<TextBlock Text="{Binding SelectedItem.HoverFace,FallbackValue=NA}"/>
 			</StackPanel>
 		</StatusBar>
 		
@@ -52,7 +69,7 @@
 			</TabControl.ItemTemplate>
 			<TabControl.ContentTemplate>
 				<DataTemplate>
-					<Views:DocumentView DocumentViewModel="{Binding}" HoverX="{Binding HoverX,Mode=OneWayToSource}" HoverY="{Binding HoverY,Mode=OneWayToSource}" HoverZ="{Binding HoverZ,Mode=OneWayToSource}"/>
+					<Views:DocumentView DocumentViewModel="{Binding}" />
 				</DataTemplate>
 			</TabControl.ContentTemplate>
 		</TabControl>

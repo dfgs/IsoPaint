@@ -9,11 +9,8 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<Views:IsometricPanel SizeX="7" SizeY="7" SizeZ="7" GridSize="32"  HorizontalAlignment="Center" VerticalAlignment="Center">
-			<Views:VoxelView Views:IsometricPanel.X="0"	Views:IsometricPanel.Y="0"	Views:IsometricPanel.Z="0" Views:IsometricPanel.CenterX="16" Views:IsometricPanel.CenterY="16"/>
-
-			<Views:VoxelView Views:IsometricPanel.X="1"	Views:IsometricPanel.Y="1"	Views:IsometricPanel.Z="0" Views:IsometricPanel.CenterX="16" Views:IsometricPanel.CenterY="16"/>
-
+		<Views:IsometricPanel SizeX="7" SizeY="10" SizeZ="7" GridSize="32"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+			
 		</Views:IsometricPanel>      
     </Grid>
 </UserControl>

@@ -47,7 +47,7 @@ namespace IsoPaint.Views
 			{
 				model = new Color();
 				if (PaletteViewModel.Colors.Any()) model.ID = PaletteViewModel.Colors.Max(item => item.ID)+1;
-				await PaletteViewModel.Colors.AddAsync(null,model);
+				PaletteViewModel.Colors.SelectedItem= await PaletteViewModel.Colors.AddAsync(null,model);
 			}
 			catch
 			{
@@ -64,6 +64,7 @@ namespace IsoPaint.Views
 			try
 			{
 				await PaletteViewModel.Colors.RemoveAsync(null);
+				if (PaletteViewModel.Colors.SelectedItem == null) PaletteViewModel.Colors.SelectedItem = PaletteViewModel.Colors.FirstOrDefault();
 			}
 			catch
 			{

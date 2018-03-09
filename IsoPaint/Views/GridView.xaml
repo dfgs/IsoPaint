@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="IsoPaint.Views.GridView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Views="clr-namespace:IsoPaint.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<Style TargetType="{x:Type ContentPresenter}" x:Key="itemsControlContainerStyle">
+			<Setter Property="Views:IsometricPanel.X" Value="{Binding X}"/>
+			<Setter Property="Views:IsometricPanel.Y" Value="{Binding Y}"/>
+			<Setter Property="Views:IsometricPanel.Z" Value="{Binding Z}"/>
+			<Setter Property="Views:IsometricPanel.CenterX" Value="0.5"/>
+			<Setter Property="Views:IsometricPanel.CenterY" Value="0.5"/>
+		</Style>
+	</UserControl.Resources>
+	
+	<Grid>
+		<ItemsControl  ItemsSource="{Binding Voxels.FilteredItems}" ItemContainerStyle="{StaticResource itemsControlContainerStyle}" >
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<Views:IsometricPanel Hover="IsometricPanel_Hover" Click="IsometricPanel_Click"  Background="Transparent" GridSize="32" 
+										  SizeX="{Binding SizeX}" SizeY="{Binding SizeY}" SizeZ="{Binding SizeZ}"
+										  Ceiling="{Binding Voxels.Ceiling}" Floor="{Binding Voxels.Floor}"
+										  />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Views:VoxelView Brush="{Binding Color.Brush}" Views:IsometricPanel.X="{Binding X}" Views:IsometricPanel.Y="{Binding Y}" Views:IsometricPanel.Z="{Binding Z}"/>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<Views:IsometricPanel Background="{x:Null}" GridSize="32" SizeX="{Binding SizeX}" SizeY="{Binding SizeY}" SizeZ="{Binding SizeZ}" PrimaryGridLineBrush="Red" DrawGrid="False">
+			<Path  Stroke="IndianRed" Fill="{x:Null}" Stretch="Fill" Views:IsometricPanel.X="{Binding HoverX}" Views:IsometricPanel.Y="{Binding HoverY}" Views:IsometricPanel.Z="{Binding HoverZ}" Views:IsometricPanel.CenterX="0.5" Views:IsometricPanel.CenterY="0.5">
+				<Path.Style>
+					<Style TargetType="{x:Type Path}">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding HoverFace}" Value="Top">
+								<Setter Property="Data" Value="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding HoverFace}" Value="Bottom">
+								<Setter Property="Data" Value="M0,0 M1,1 M0,0.75 l0.5,-0.25 l0.5,0.25 l-0.5,0.25 l-0.5,-0.25"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding HoverFace}" Value="Front">
+								<Setter Property="Data" Value="M0,0 M1,1 M0,0.25 l0.5,0.25 l0,0.5 l-0.5,-0.25 l0,-0.5"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding HoverFace}" Value="Back">
+								<Setter Property="Data" Value="M0,0 M1,1 M0.5,0 l0.5,0.25 l0,0.5 l-0.5,-0.25 l0,-0.5"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding HoverFace}" Value="Left">
+								<Setter Property="Data" Value="M0,0 M1,1 M0,0.25 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding HoverFace}" Value="Right">
+								<Setter Property="Data" Value="M0,0 M1,1 M0.5,0.5 l0.5,-0.25 l0,0.5 l-0.5,0.25 l0,-0.5"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Path.Style>
+			</Path>
+			
+			
+		</Views:IsometricPanel>
+	</Grid>
+</UserControl>

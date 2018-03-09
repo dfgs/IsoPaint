@@ -20,15 +20,15 @@ namespace IsoPaint.ViewModels
 			return ValueType.Equals(A,B);
 		}
 
-		protected override async Task OnAddModelAsync(ModelType Item, int Index)
+		protected override async Task OnAddModelAsync(ModelType Item)
 		{
-			await Dispatcher.InvokeAsync(() => { Model.Insert(Index, Item); });
+			await Dispatcher.InvokeAsync(() => { Model.Add(Item); });
 		}
-		protected override async Task OnRemoveModelAsync(ModelType Item, int Index)
+		protected override async Task OnRemoveModelAsync(ModelType Item)
 		{
-			await Dispatcher.InvokeAsync(() => { Model.RemoveAt(Index); });
+			await Dispatcher.InvokeAsync(() => { Model.Remove(Item); });
 		}
-		protected override async Task OnEditModelAsync(ModelType Item, int Index)
+		protected override async Task OnEditModelAsync(ModelType Item)
 		{
 			await Task.Yield();
 		}

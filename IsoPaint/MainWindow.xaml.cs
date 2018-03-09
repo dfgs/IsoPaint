@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewLib;
+using ViewModelLib.PropertyViewModels;
 
 namespace IsoPaint
 {
@@ -41,6 +43,14 @@ namespace IsoPaint
 			DataContext = documentViewModel;
 		}
 
+		private bool EditCallBack(IPropertyViewModelCollection Properties)
+		{
+			EditWindow editWindow;
+
+			editWindow = new EditWindow() { Owner =this, PropertyViewModelCollection = Properties };
+			return editWindow.ShowDialog() ?? false;
+		}
+
 		private void NewCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.Handled = true; e.CanExecute = true;
@@ -51,13 +61,15 @@ namespace IsoPaint
 
 			try
 			{
-				documentViewModel.SelectedItem = await documentViewModel.AddAsync(null);
+				documentViewModel.SelectedItem = await documentViewModel.AddAsync(EditCallBack);
 			}
 			catch
 			{
 				documentViewModel.ErrorMessage = "Failed to create new document";
 			}
 		}
+
+		
 
 		private void OpenCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{

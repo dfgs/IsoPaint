@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
 using ViewModelLib;
+using ViewModelLib.Attributes;
 
 namespace IsoPaint.ViewModels
 {
@@ -30,16 +31,19 @@ namespace IsoPaint.ViewModels
 			private set { SetValue(FileNameProperty, value); }
 		}
 
+		[Editable(Header="Size X",IsMandatory =true)]
 		public int SizeX
 		{
 			get { return Model.SizeX; }
 			set { Model.SizeX = value; OnPropertyChanged(); }
 		}
+		[Editable(Header = "Size Y", IsMandatory = true)]
 		public int SizeY
 		{
 			get { return Model.SizeY; }
 			set { Model.SizeY = value; OnPropertyChanged(); }
 		}
+		[Editable(Header = "Size Z", IsMandatory = true)]
 		public int SizeZ
 		{
 			get { return Model.SizeZ; }
@@ -69,6 +73,15 @@ namespace IsoPaint.ViewModels
 		}
 
 
+		public static readonly DependencyProperty HoverFaceProperty = DependencyProperty.Register("HoverFace", typeof(Faces), typeof(DocumentViewModel));
+		public Faces HoverFace
+		{
+			get { return (Faces)GetValue(HoverFaceProperty); }
+			set { SetValue(HoverFaceProperty, value); }
+		}
+
+
+
 		public VoxelViewModelCollection Voxels
 		{
 			get;
@@ -91,6 +104,7 @@ namespace IsoPaint.ViewModels
 		protected override async Task OnLoadedAsync(Document Model)
 		{
 			await Voxels.LoadAsync(Model.Voxels);
+			Voxels.Ceiling = SizeZ;
 			await Palette.LoadAsync(Model.Palette);
 		}
 

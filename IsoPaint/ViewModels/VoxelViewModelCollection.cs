@@ -5,18 +5,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using ViewModelLib;
+using System.Collections.Specialized;
 
 namespace IsoPaint.ViewModels
 {
-	public class VoxelViewModelCollection : ViewModelCollection<List<Voxel>, VoxelViewModel, Voxel>,IComparer<Tuple<int,int,int>>
+	public class VoxelViewModelCollection : ListViewModelCollection<VoxelViewModel, Voxel>,IComparer<Tuple<int,int,int>>
 	{
 		private DocumentViewModel document;
+
+
+		public static readonly DependencyProperty CeilingProperty = DependencyProperty.Register("Ceiling", typeof(int), typeof(VoxelViewModelCollection),new PropertyMetadata(0,CeilingPropertyChanged));
+		public int Ceiling
+		{
+			get { return (int)GetValue(CeilingProperty); }
+			set {SetValue(CeilingProperty, value); }
+		}
+		public static readonly DependencyProperty FloorProperty = DependencyProperty.Register("Floor", typeof(int), typeof(VoxelViewModelCollection), new PropertyMetadata(0, CeilingPropertyChanged));
+		public int Floor
+		{
+			get { return (int)GetValue(FloorProperty); }
+			set { SetValue(FloorProperty, value); }
+		}
+
+		public IEnumerable<VoxelViewModel> FilteredItems
+		{
+			get { return this.Where(item=>(item.Z<Ceiling) && (item.Z>=Floor)); }
+		}
 
 		public VoxelViewModelCollection(ILogger Logger, DocumentViewModel Document) : base(Logger)
 		{
 			this.document = Document;
+			this.CollectionChanged += VoxelViewModelCollection_CollectionChanged;
 		}
+
+		private void VoxelViewModelCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			OnPropertyChanged("FilteredItems");
+		}
+
+		private static void CeilingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			((VoxelViewModelCollection)d).OnPropertyChanged("FilteredItems");
+		}
+
+
 
 		public bool ContainsVoxelAtPos(int X, int Y, int Z)
 		{
@@ -76,22 +110,7 @@ namespace IsoPaint.ViewModels
 
 		
 
-		protected override async Task OnAddModelAsync(Voxel Item, int Index)
-		{
-			Model.Insert(Index, Item);
-			await Task.Yield();
-		}
-
-		protected override async Task OnEditModelAsync(Voxel Item, int Index)
-		{
-			await Task.Yield();
-		}
-		
-		protected override async Task OnRemoveModelAsync(Voxel Item, int Index)
-		{
-			Model.RemoveAt(Index);
-			await Task.Yield();
-		}
+	
 
 		
 	}
