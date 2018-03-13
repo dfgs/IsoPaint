@@ -110,17 +110,13 @@ namespace IsoPaint.ViewModels
 
 		public async Task LoadAsync(string FileName)
 		{
-			XmlSerializer serializer;
+			
 			Document model;
 
 			this.FileName = FileName;
 			this.Name = System.IO.Path.GetFileNameWithoutExtension(FileName);
 
-			using (FileStream stream = new FileStream(FileName, FileMode.Open))
-			{
-				serializer = new XmlSerializer(typeof(Document));
-				model=await Dispatcher.InvokeAsync<Document>(() => { return (Document)serializer.Deserialize(stream); });
-			}
+			model=await Dispatcher.InvokeAsync<Document>(() => { return Document.LoadFromFile(FileName); });
 			await LoadAsync(model);
 		}
 
@@ -134,13 +130,16 @@ namespace IsoPaint.ViewModels
 
 		public async Task SaveAsync()
 		{
-			XmlSerializer serializer;
-			using (FileStream stream = new FileStream(FileName, FileMode.Create))
-			{
-				serializer = new XmlSerializer(typeof(Document));
-				await Dispatcher.InvokeAsync(() => { serializer.Serialize(stream, Model); });
-			}
+			await Dispatcher.InvokeAsync(() => { Model.SaveToFile(FileName); });
 		}
+
+		public async Task ExportToPOVFileAsync(string FileName)
+		{
+			await Dispatcher.InvokeAsync(() => { Model.ExportToPOC(FileName); });
+		}
+
+
+
 
 	}
 }

@@ -7,14 +7,20 @@
         xmlns:ViewLib="clr-namespace:ViewLib;assembly=ViewLib"
 		xmlns:ViewModels="clr-namespace:IsoPaint.ViewModels"
 		xmlns:Views="clr-namespace:IsoPaint.Views"
+		xmlns:wtk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		mc:Ignorable="d" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen"
         Title="IsoPaint" Height="480" Width="640" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
 
+	<Window.Resources>
+		<RoutedCommand x:Key="exportPOV"/>
+	</Window.Resources>
+	
 	<Window.CommandBindings>
 		<CommandBinding Command="New" CanExecute="NewCommandBinding_CanExecute" Executed="NewCommandBinding_Executed"/>
 		<CommandBinding Command="Save" CanExecute="SaveCommandBinding_CanExecute" Executed="SaveCommandBinding_Executed"/>
 		<CommandBinding Command="SaveAs" CanExecute="SaveAsCommandBinding_CanExecute" Executed="SaveAsCommandBinding_Executed"/>
 		<CommandBinding Command="Open" CanExecute="OpenCommandBinding_CanExecute" Executed="OpenCommandBinding_Executed"/>
+		<CommandBinding Command="{StaticResource exportPOV}" CanExecute="ExportPOVCommandBinding_CanExecute" Executed="ExportPOVCommandBinding_Executed"/>
 	</Window.CommandBindings>
 	
     <DockPanel>
@@ -52,12 +58,16 @@
 			<Button ToolTip="Open document" Command="Open">
 				<Image Source="Images/folder_picture.png" Stretch="None"/>
 			</Button>
-			<Button ToolTip="Save document" Command="Save">
+			<wtk:DropDownButton ToolTip="Save document">
+				<wtk:DropDownButton.DropDownContent>
+					<StackPanel>
+						<MenuItem Header="Save" Command="Save"/>
+						<MenuItem Header="Save as" Command="SaveAs"/>
+						<MenuItem Header="Export pov" Command="{StaticResource exportPOV}"/>
+					</StackPanel>
+				</wtk:DropDownButton.DropDownContent>
 				<Image Source="Images/picture_save.png" Stretch="None"/>
-			</Button>
-			<Button ToolTip="Save document as" Command="SaveAs">
-				<Image Source="Images/picture_save.png" Stretch="None"/>
-			</Button>
+			</wtk:DropDownButton>
 		</StackPanel>
 		
 		<ViewLib:ErrorView DockPanel.Dock="Top" ErrorMessage="{Binding ErrorMessage}"/>

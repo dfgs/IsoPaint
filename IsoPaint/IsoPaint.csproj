@@ -74,6 +74,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\Color.cs" />
     <Compile Include="Models\Consts.cs" />
+    <Compile Include="Models\ExtensionMethods.cs" />
     <Compile Include="Models\Palette.cs" />
     <Compile Include="Models\Voxel.cs" />
     <Compile Include="ViewModels\ColorViewModel.cs" />

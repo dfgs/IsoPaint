@@ -126,7 +126,8 @@ namespace IsoPaint
 			SaveFileDialog dialog;
 
 			dialog = new SaveFileDialog();
-			dialog.FileName = documentViewModel.SelectedItem.FileName;
+			dialog.InitialDirectory = System.IO.Path.GetFullPath(documentViewModel.SelectedItem.FileName);
+			dialog.FileName = System.IO.Path.GetFileName( documentViewModel.SelectedItem.FileName);
 			dialog.Filter = "xml files|*.xml|All files|*.*";
 			if (!dialog.ShowDialog(this) ?? false) return;
 
@@ -137,6 +138,31 @@ namespace IsoPaint
 			catch
 			{
 				documentViewModel.ErrorMessage = "Failed to save document";
+			}
+		}
+
+		private void ExportPOVCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.Handled = true; e.CanExecute = documentViewModel.SelectedItem != null;
+		}
+
+		private async void ExportPOVCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			SaveFileDialog dialog;
+
+			dialog = new SaveFileDialog();
+			dialog.InitialDirectory = System.IO.Path.GetFullPath(documentViewModel.SelectedItem.FileName);
+			dialog.FileName = System.IO.Path.GetFileName( System.IO.Path.ChangeExtension(documentViewModel.SelectedItem.FileName,".pov"));
+			dialog.Filter = "pov files|*.pov|All files|*.*";
+			if (!dialog.ShowDialog(this) ?? false) return;
+
+			try
+			{
+				await documentViewModel.SelectedItem.ExportToPOVFileAsync(dialog.FileName);
+			}
+			catch
+			{
+				documentViewModel.ErrorMessage = "Failed to export document";
 			}
 		}
 
