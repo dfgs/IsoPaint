@@ -135,7 +135,7 @@ namespace IsoPaint.ViewModels
 
 		public async Task ExportToPOVFileAsync(string FileName)
 		{
-			await Dispatcher.InvokeAsync(() => { Model.ExportToPOC(FileName); });
+			await Dispatcher.InvokeAsync(() => { Model.ExportToPOV(FileName); });
 		}
 
 

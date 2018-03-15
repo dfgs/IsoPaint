@@ -126,8 +126,11 @@ namespace IsoPaint
 			SaveFileDialog dialog;
 
 			dialog = new SaveFileDialog();
-			dialog.InitialDirectory = System.IO.Path.GetFullPath(documentViewModel.SelectedItem.FileName);
-			dialog.FileName = System.IO.Path.GetFileName( documentViewModel.SelectedItem.FileName);
+			if (documentViewModel.SelectedItem.FileName != null)
+			{
+				dialog.InitialDirectory = System.IO.Path.GetFullPath(documentViewModel.SelectedItem.FileName);
+				dialog.FileName = System.IO.Path.GetFileName(documentViewModel.SelectedItem.FileName);
+			}
 			dialog.Filter = "xml files|*.xml|All files|*.*";
 			if (!dialog.ShowDialog(this) ?? false) return;
 
@@ -151,8 +154,11 @@ namespace IsoPaint
 			SaveFileDialog dialog;
 
 			dialog = new SaveFileDialog();
-			dialog.InitialDirectory = System.IO.Path.GetFullPath(documentViewModel.SelectedItem.FileName);
-			dialog.FileName = System.IO.Path.GetFileName( System.IO.Path.ChangeExtension(documentViewModel.SelectedItem.FileName,".pov"));
+			if (documentViewModel.SelectedItem.FileName != null)
+			{
+				dialog.InitialDirectory = System.IO.Path.GetFullPath(documentViewModel.SelectedItem.FileName);
+				dialog.FileName = System.IO.Path.GetFileName(System.IO.Path.ChangeExtension(documentViewModel.SelectedItem.FileName, ".pov"));
+			}
 			dialog.Filter = "pov files|*.pov|All files|*.*";
 			if (!dialog.ShowDialog(this) ?? false) return;
 

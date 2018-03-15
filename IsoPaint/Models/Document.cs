@@ -73,7 +73,7 @@ namespace IsoPaint.Models
 		}
 
 
-		public void ExportToPOC(string FileName)
+		public void ExportToPOV(string FileName)
 		{
 			StreamWriter writer;
 			
@@ -92,11 +92,19 @@ namespace IsoPaint.Models
 			Writer.WriteLine("#include \"colors.inc\"");
 
 			Writer.WriteLine();
+			Writer.WriteLine("#declare VoxelSize = 1;");
+			Writer.WriteLine($"#declare SizeX = {SizeX};");
+			Writer.WriteLine($"#declare SizeY = {SizeY};");
+			Writer.WriteLine($"#declare SizeZ = {SizeZ};");
+			Writer.WriteLine($"#declare UpScale=sqrt(2)/sqrt(3);");
+			Writer.WriteLine();
 			Writer.WriteLine("camera {");
-			Writer.WriteLine("	orthographic angle 50");
-			Writer.WriteLine("	location <1,1,1> *5");
-			Writer.WriteLine("	look_at <0,0,0>");
-			Writer.WriteLine("	right x* image_width/ image_height");
+			Writer.WriteLine("	orthographic");
+			Writer.WriteLine("	location <0,0,-1>*10000");
+			Writer.WriteLine("	right x*SizeX*sqrt(2)");
+			Writer.WriteLine("	up y*SizeX*sqrt(2)");
+			Writer.WriteLine("	rotate x*30");
+			Writer.WriteLine("	rotate y*225");
 			Writer.WriteLine("}");
 		}
 		private void ExportLightToPOV(StreamWriter Writer)
@@ -126,13 +134,18 @@ namespace IsoPaint.Models
 
 		private void ExportVoxelsToPOV(StreamWriter Writer)
 		{
+			Writer.WriteLine();
+			Writer.WriteLine("#declare voxel =");
+			Writer.WriteLine("box {");
+			Writer.WriteLine("	<-VoxelSize/2,-VoxelSize/2*UpScale,-VoxelSize/2>, <VoxelSize/2,VoxelSize/2*sqrt(2)/sqrt(3),VoxelSize/2>");
+			Writer.WriteLine("}");
 			foreach (Voxel voxel in Voxels)
 			{
 				Writer.WriteLine();
-				Writer.WriteLine("box {");
-				Writer.WriteLine("	<-0.5,-0.5,-0.5>, <0.5,0.5,0.5>");
+				Writer.WriteLine("object {");
+				Writer.WriteLine("	voxel");
 				Writer.WriteLine($"	texture {{ Color{voxel.ColorID}}}");
-				Writer.WriteLine($"	translate <{voxel.X},{voxel.Z},{voxel.Y}>");
+				Writer.WriteLine($"	translate <{voxel.X},{voxel.Z}*UpScale,{voxel.Y}>");
 				Writer.WriteLine("}");
 			}
 		}
